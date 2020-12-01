@@ -2,12 +2,23 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { ReactComponent as TimesSolid } from './times-solid.svg'
 import { availableColors, capitalize } from '../filters/colors'
+import { selectTodoById } from './todosSlice'
 
-const selectTodoById = (state, todoId) => {
-    return state.todos.find(todo => todo.id === todoId)
-}
+// const selectTodoById = (state, todoId) => {
+//     return state.todos.entities.find(todo => todo.id === todoId)
+// }
 
 const TodoListItem = ({ id }) => {
+    // careful about using a selector with multiple arguments!
+    // calling useSelector(selectThatJustTakesStateAsAParam) is fine
+    // -> A selector is a function that takes the entire Redux store
+    //    state as its argument, reads some value from the state, and
+    //    returns that result.
+    // HOWEVER, if you're calling a selector with another argument
+    // without explicitly passing in the state as part of an arrow
+    // func e.g. useSelector(selectWithASecondParam(state, param2))
+    // will appear to overwrite state unless state is explicitly
+    // declared as a param. So probably best not to use implicit state.
     const todo = useSelector(state => selectTodoById(state, id))
     const { text, completed, color } = todo
 
